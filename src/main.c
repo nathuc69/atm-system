@@ -19,37 +19,33 @@ void mainMenu(struct User u)
     switch (option)
     {
     case 1:
-    printf("%s" , u.name);
         createNewAcc(u);
         break;
     case 2:
-        // student TODO : add your **Update account information** function
-        // here
+        updateAccountInfo(u);
         break;
     case 3:
-        // student TODO : add your **Check the details of existing accounts** function
-        // here
+        checkAccountDetails(u);
         break;
     case 4:
         checkAllAccounts(u);
         break;
     case 5:
-        // student TODO : add your **Make transaction** function
-        // here
+        makeTransaction(u);
         break;
     case 6:
-        // student TODO : add your **Remove existing account** function
-        // here
+        removeAccount(u);
         break;
     case 7:
-        // student TODO : add your **Transfer owner** function
-        // here
+        transferOwnership(u);
         break;
     case 8:
         exit(1);
         break;
     default:
-        printf("Invalid operation!\n");
+        printf("Invalid operation! Please choose 1-8.\n");
+        mainMenu(u);  // Return to main menu instead of exiting
+        break;
     }
 };
 
@@ -82,7 +78,7 @@ void initMenu(struct User *u)
             r = 1;
             break;
         case 2:
-            mainMenu(*u);
+            registerMenu(u->name, u->password);
             r = 1;
             break;
         case 3:
@@ -98,7 +94,31 @@ int main()
 {
     struct User u;
     
+    // Initialize user struct
+    u.id = -1;
+    strcpy(u.name, "");
+    strcpy(u.password, "");
+    
     initMenu(&u);
+    
+    // Get user ID from file after successful login
+    FILE *fp = fopen("./data/users.txt", "r");
+    if (fp != NULL) {
+        struct User temp;
+        while (fscanf(fp, "%d %s %s", &temp.id, temp.name, temp.password) != EOF) {
+            if (strcmp(temp.name, u.name) == 0) {
+                u.id = temp.id;
+                break;
+            }
+        }
+        fclose(fp);
+    }
+    
+    if (u.id == -1) {
+        printf("Error: Could not find user ID\n");
+        exit(1);
+    }
+    
     mainMenu(u);
     return 0;
 }
