@@ -33,7 +33,7 @@ void loginMenu(char a[50], char pass[50])
     }
 };
 
-void registerMenu(char a[50], char pass[50])
+int registerMenu(char a[50], char pass[50])
 {
     struct termios oflags, nflags;
     FILE *fp;
@@ -65,7 +65,7 @@ void registerMenu(char a[50], char pass[50])
         printf("\n\t\t\t\tPress any key to continue...");
         getchar();
         getchar();
-        return;
+        return 0;
     }
 
     // disabling echo for password input
@@ -77,7 +77,8 @@ void registerMenu(char a[50], char pass[50])
     if (tcsetattr(fileno(stdin), TCSANOW, &nflags) != 0)
     {
         perror("tcsetattr");
-        return exit(1);
+        exit(1);
+        //return 1;
     }
     printf("\n\t\t\t\tEnter the password: ");
     scanf("%49s", pass);
@@ -86,7 +87,8 @@ void registerMenu(char a[50], char pass[50])
     if (tcsetattr(fileno(stdin), TCSANOW, &oflags) != 0)
     {
         perror("tcsetattr");
-        return exit(1);
+        exit(1);
+        //return 1 ;
     }
 
     // Get the next available user ID
@@ -117,6 +119,7 @@ void registerMenu(char a[50], char pass[50])
     printf("\n\t\t\t\tPress any key to continue...");
     getchar();
     getchar();
+    return 1 ;
 };
 
 const char *getPassword(struct User u)

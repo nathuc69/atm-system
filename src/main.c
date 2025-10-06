@@ -78,8 +78,15 @@ void initMenu(struct User *u)
             r = 1;
             break;
         case 2:
-            registerMenu(u->name, u->password);
-            r = 1;
+           if (registerMenu(u->name, u->password)) {
+                r = 1;
+           }
+            system("clear");
+            printf("\n\n\t\t======= ATM =======\n");
+            printf("\n\t\t-->> Feel free to login / register :\n");
+            printf("\n\t\t[1]- login\n");
+            printf("\n\t\t[2]- register\n");
+            printf("\n\t\t[3]- exit\n");
             break;
         case 3:
             exit(1);
@@ -116,7 +123,7 @@ int main()
     
     if (u.id == -1) {
         printf("Error: Could not find user ID\n");
-        exit(1);
+        exit(1); 
     }
     
     mainMenu(u);
